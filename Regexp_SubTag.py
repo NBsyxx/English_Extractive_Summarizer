@@ -2,11 +2,11 @@ import re
 import datetime
 
 
-for i in range(0, 10):
+for i in range(0, 13):
     print(datetime.datetime.now(), 'opening the wiki_{}'.format(i),)
-    filename = 'wiki_{}.txt'.format(str(i))
+    filename = 'Wiki_source/wiki_{}.txt'.format(str(i))
     file_input = open(filename, 'r', errors= 'ignore')
-    file_output = open('corpus_wiki_{0}.txt'.format(str(i)), 'a', errors='ignore')
+    file_output = open('Training_corpus/corpus_wiki_{0}.txt'.format(str(i)), 'a', errors='ignore')
     count = 0
     while True:
         count += 1
