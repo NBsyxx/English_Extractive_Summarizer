@@ -3,7 +3,9 @@ import math
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
 global model
+# Load the pretrained model as global
 model = word2vec.Word2Vec.load("realTrained.model")
+
 
 def cut_sentences(sentence):
     puns = frozenset('.')
@@ -15,10 +17,6 @@ def cut_sentences(sentence):
             tmp = []
     yield ''.join(tmp)
 
-sentence = 'Today here. we go. grow this ? possibly wrong.'
-temp = cut_sentences(sentence)
-print(temp.__str__())
-
 
 def two_sentences_similarity(sents_1, sents_2):
     counter = 0
@@ -27,7 +25,7 @@ def two_sentences_similarity(sents_1, sents_2):
             counter += 1
     return counter / (math.log(len(sents_1) + len(sents_2)))
 
-#
+
 def cosine_similarity(vec1, vec2):
     tx = np.array(vec1)
     ty = np.array(vec2)
@@ -37,12 +35,14 @@ def cosine_similarity(vec1, vec2):
     cosine_value = cos1 / float(cos21 * cos22)
     return cosine_value
 
+
 def clear_oov(sents):
     temp = []
     for word in sents[1:]:
         if word in model.wv.vocab:
             temp.append(word)
     return temp
+
 
 def compute_similarity_by_avg(sents_1, sents_2):
     if len(sents_1) == 0 or len(sents_2) == 0:
@@ -57,6 +57,7 @@ def compute_similarity_by_avg(sents_1, sents_2):
         vec2 = vec2 + model[word2]
     similarity = cosine_similarity(vec1 / len(sents_1), vec2 / len(sents_2))
     return similarity
+
 
 def calculate_score(weight_graph, scores, i):
     length = len(weight_graph)
@@ -74,6 +75,7 @@ def calculate_score(weight_graph, scores, i):
     #print(i,', weighted score,',weighted_score)
     return weighted_score
 
+
 def weight_sentences_rank(weight_graph):
     scores = [0.5 for _ in range(len(weight_graph))]
     old_scores = [0.0 for _ in range(len(weight_graph))]
@@ -86,12 +88,20 @@ def weight_sentences_rank(weight_graph):
             print(scores[i])
     return scores
 
+
 def different(score_1,score_2):
-    for i in score_1:
-        for j in score_2:
-            if abs(i - j) > 0.2:
-                return True
-    return False
+    difference = []
+    for i in range(0, score_1.__len__()):
+        difference.append(score_1[i]-score_2[i])
+    sum_of_square = 0
+    for j in difference:
+        sum_of_square += j * j
+    print('Difference:', sum_of_square)
+    if sum_of_square < 0.00001:
+        return False
+    else:
+        return True
+
 
 def create_graph(sents):
     texts = len(sents)
@@ -103,6 +113,7 @@ def create_graph(sents):
         graph[i] = temp
     return graph
 
+
 def summarize(text, n):
     tokens = cut_sentences(text)
     sentences = []
@@ -112,14 +123,12 @@ def summarize(text, n):
         if temp.__len__()>= 6:
             sents.append(temp)
             sentences.append(sent)
-
-    #sents = filter_model(sents)
     graph = create_graph(sents)
-    print('---Graph Created---')
-    print(graph)
+    #print('---Graph Created---')
+    #print(graph)
     scores = weight_sentences_rank(graph)
-    print('---Scores Calculated---')
-    print(scores)
+    #print('---Scores Calculated---')
+    #print(scores)
     sent_selected = nlargest(n, scores)
     sent_index = []
     for i in range(n):
@@ -128,22 +137,24 @@ def summarize(text, n):
     print('---Sentences Returned---')
     return [sentences[i] for i in sent_index]
 
+
 def nlargest(n, iterable):
-    list = []
+    rank_list = []
     count = 0
     for i in iterable:
-        list.append((i, count))
+        rank_list.append((i, count))
         count += 1
-    list.sort(key = lambda a : a[0],reverse=True)
-    return list[0:n]
+    rank_list.sort(key = lambda a : a[0],reverse=True)
+    return rank_list[0:n]
+
 
 if __name__ == '__main__':
     file = open("input.txt", "r",errors='ignore')
-    text = file.read().replace('\n', '')
+    original_text = file.read()
+    text = original_text.replace('\n', '')
     file.close()
-    print('原文为：')
-    print(text)
-    print('///////////')
+    print('The Original Text is：')
+    print(original_text)
     summarize_text = summarize(text, 5)
     for i in summarize_text:
         print(i)
