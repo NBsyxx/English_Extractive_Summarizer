@@ -9,5 +9,7 @@ def train(filename, model_name):
     model.train(sentences, total_examples=len(list(sentences)), epochs=15)
     model.save(model_name)
 
-train('continue.txt','word2vec_wiki_corpus.model')
+
+for i in range(10,13):
+    train('Training_corpus/corpus_wiki_{}.txt'.format(str(i)),'RealTrained.model')
 

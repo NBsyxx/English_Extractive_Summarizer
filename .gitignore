@@ -3,6 +3,8 @@
 
 # txt input and output
 *.txt
+*.npy
+*.model
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
