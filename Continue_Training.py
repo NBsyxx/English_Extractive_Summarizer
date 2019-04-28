@@ -10,6 +10,6 @@ def train(filename, model_name):
     model.save(model_name)
 
 
-for i in range(10,13):
+for i in range(0,13):
     train('Training_corpus/corpus_wiki_{}.txt'.format(str(i)),'RealTrained.model')
 

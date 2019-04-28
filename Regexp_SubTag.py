@@ -17,8 +17,7 @@ stop_word_list = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves",
                   "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
 
 
-
-for i in range(1, 13):
+for i in range(0, 13):
     print(datetime.datetime.now(), 'opening the wiki_{}'.format(i),)
     filename = 'Wiki_source/wiki_{}.txt'.format(str(i))
     file_input = open(filename, 'r', encoding='utf-8',errors='ignore')
