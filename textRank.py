@@ -1,8 +1,27 @@
 from gensim.models import word2vec
 import math
 import numpy as np
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
+
+
+global stop_word_list
 global model
+
+
+stop_word_list = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves",
+                  "you", "your", "yours", "yourself", "yourselves", "he", "him",
+                  "his", "himself", "she", "her", "hers", "herself", "it", "its",
+                  "itself", "they", "them", "their", "theirs", "themselves", "what",
+                  "which", "who", "whom", "this", "that", "these", "those", "am", "is",
+                  "are", "was", "were", "be", "been", "being", "have", "has", "had",
+                  "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but",
+                  "if", "or", "because", "as", "until", "while", "of", "at", "by", "for",
+                  "with", "about", "against", "between", "into", "through", "during", "before",
+                  "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off",
+                  "over", "under", "again", "further", "then", "once", "here", "there", "when",
+                  "where", "why", "how", "all", "any", "both", "each", "few", "more", "most",
+                  "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than",
+                  "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
 # Load the pretrained model as global
 model = word2vec.Word2Vec.load("realTrained.model")
 
@@ -114,6 +133,14 @@ def create_graph(sents):
     return graph
 
 
+def filter_stop_words(sents):
+    filtered_list = []
+    for sent in sents:
+        if sent not in stop_word_list:
+            filtered_list.append(sent)
+    return filtered_list
+
+
 def summarize(text, n):
     tokens = cut_sentences(text)
     sentences = []
@@ -123,6 +150,7 @@ def summarize(text, n):
         if temp.__len__()>= 6:
             sents.append(temp)
             sentences.append(sent)
+    sents = filter_stop_words(sents)
     graph = create_graph(sents)
     #print('---Graph Created---')
     #print(graph)
