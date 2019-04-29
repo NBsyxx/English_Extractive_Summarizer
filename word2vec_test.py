@@ -11,14 +11,14 @@ def print_closest_words(word):
 
 
 model = word2vec.Word2Vec.load("realTrained.model")
-print_closest_words('Balenciaga')
-print_closest_words('Versace')
+print_closest_words('overwatch')
+print_closest_words('Tracer')
 print('\n')
 
-result = model.most_similar(positive=['Food','Chinese'])
+result = model.most_similar(positive=['light','electricity'])
 for i in result:
     print(i[0],i[1])
 print('\n')
-result = model.most_similar(positive=['expensive','clothing'])
+result = model.most_similar(positive=['fire','work','man'])
 for i in result:
     print(i[0],i[1])
