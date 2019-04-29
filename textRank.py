@@ -2,8 +2,10 @@ from gensim.models import word2vec
 import math
 import numpy as np
 from nltk.tokenize import word_tokenize
+import time
 
 
+time_start = time.time()
 global stop_word_list
 global model
 
@@ -102,9 +104,9 @@ def weight_sentences_rank(weight_graph):
         for i in range(len(weight_graph)):
             old_scores[i] = scores[i]
         for i in range(len(weight_graph)):
-            print('---scores',i,'is processing:')
+            #print('---scores',i,'is processing:')
             scores[i] = calculate_score(weight_graph, scores, i)
-            print(scores[i])
+            #print(scores[i])
     return scores
 
 
@@ -177,6 +179,7 @@ def nlargest(n, iterable):
 
 
 if __name__ == '__main__':
+    time_start = time.time()
     file = open("input.txt", "r",errors='ignore')
     original_text = file.read()
     text = original_text.replace('\n', '')
@@ -186,3 +189,5 @@ if __name__ == '__main__':
     summarize_text = summarize(text, 5)
     for i in summarize_text:
         print(i)
+    time_end = time.time()
+    print('It takes, '+str(time_end-time_start)+' to extract Summary')
