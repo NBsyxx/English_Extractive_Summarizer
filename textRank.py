@@ -24,7 +24,8 @@ stop_word_list = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves",
                   "where", "why", "how", "all", "any", "both", "each", "few", "more", "most",
                   "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than",
                   "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
-# Load the pretrained model as global
+
+# Load the pre-trained model as global
 model = word2vec.Word2Vec.load("realTrained.model")
 
 
@@ -93,7 +94,6 @@ def calculate_score(weight_graph, scores, i):
                 denominator = 1
         added_score += fraction / denominator
     weighted_score = (1 - d) + d * added_score
-    #print(i,', weighted score,',weighted_score)
     return weighted_score
 
 
@@ -104,9 +104,7 @@ def weight_sentences_rank(weight_graph):
         for i in range(len(weight_graph)):
             old_scores[i] = scores[i]
         for i in range(len(weight_graph)):
-            #print('---scores',i,'is processing:')
             scores[i] = calculate_score(weight_graph, scores, i)
-            #print(scores[i])
     return scores
 
 
@@ -154,18 +152,27 @@ def summarize(text, n):
             sentences.append(sent)
     sents = filter_stop_words(sents)
     graph = create_graph(sents)
-    #print('---Graph Created---')
-    #print(graph)
     scores = weight_sentences_rank(graph)
-    #print('---Scores Calculated---')
-    #print(scores)
+    print('----------Scores Calculated------------')
+    print(scores)
+
+    # if you want to output percentage of code, modify here!!
+    #n = int(len(sentences)*0.2)
     sent_selected = nlargest(n, scores)
     sent_index = []
     for i in range(n):
         sent_index.append(sent_selected[i][1])
     sent_index.sort()
-    print('---Sentences Returned---')
+    print('---Sentences Returned--- with', sent_selected.__len__()/sents.__len__(),'---of the sentence kept')
     return [sentences[i] for i in sent_index]
+
+
+def count_sentence_with_score(compare_score,scores):
+    count = 0
+    for score in scores:
+        if score > compare_score:
+            count += 1
+    return count
 
 
 def nlargest(n, iterable):
@@ -184,10 +191,15 @@ if __name__ == '__main__':
     original_text = file.read()
     text = original_text.replace('\n', '')
     file.close()
-    print('The Original Text is：')
+    print('-----------The Original Text is:----------------------')
     print(original_text)
-    summarize_text = summarize(text, 5)
+    print('------------------------------------------------------')
+
+    num_of_sents = int(input('Number Sentences for Generated Summary?\n'))
+    summarize_text = summarize(text, num_of_sents)
+    print('-----------Running-------------------------------------')
+
     for i in summarize_text:
         print(i)
     time_end = time.time()
-    print('It takes, '+str(time_end-time_start)+' to extract Summary')
+    print('It takes '+str(time_end-time_start)+'s to extract Summary')
