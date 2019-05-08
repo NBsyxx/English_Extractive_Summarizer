@@ -11,20 +11,23 @@ make sure the trained model is in folder.
 
 ------test word2vec:---
 
-1.install gensim package by typing (Linux)
+1.  install gensim package by typing (Linux)
 
 >>pip3 install gensim 
 
-2. type 
+2.  type 
 
 >>python3 word2vec_text.py
 
 and hit enter
 
 ------- SUMMARIZER-----
+
 Automatic summarize:
-1. name source text as 'input.txt', make sure it's in folder 
-2. type
+
+1.  name source text as 'input.txt', make sure it's in folder 
+
+2.  type
 
 >>python3 textRank.py
 
