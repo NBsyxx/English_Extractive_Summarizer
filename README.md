@@ -3,11 +3,14 @@ An extractive summarizer for English, based on word2Vec and text rank
 
 
 
----------Instructions-------------
+#---------Instructions-------------
+
 git clone 
+
 make sure the trained model is in folder.
 
 ------test word2vec:---
+
 1.install gensim package by typing (Linux)
 
 >>pip3 install gensim 
@@ -31,7 +34,7 @@ and hit enter
 
 
 
----------Development Ideas--------
+#---------Development Ideas--------
 
 This summarizer aims to extract several most important sentences in a piece of formally written English Material,
 it ranks the sentences in text and gives the most important ones.
